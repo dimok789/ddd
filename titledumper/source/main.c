@@ -27,8 +27,6 @@
 #include <inttypes.h>
 #ifndef __APPLE__
 #include <malloc.h>
-#define fopen64 fopen
-#define ftello64 ftello
 #endif
 #include <sys/stat.h>
 #include "Input.h"
@@ -185,6 +183,9 @@ void processTag(int client_socket, SendData *sendData)
         {
             lastTime = gettime();
             lastSize = 0;
+#ifdef __APPLE__
+#define fopen64 fopen
+#endif
             pFile = fopen64(localPath, "wb");
             printf("Open file: %s\n", localPath);
             if(!pFile) {
@@ -198,6 +199,9 @@ void processTag(int client_socket, SendData *sendData)
         if(!pFile) {
             break;
         }
+#ifdef __APPLE__
+#define ftello64 ftello
+#endif
         uint64_t size = (uint64_t)ftello64(pFile);
         unsigned int time = gettime();
         float fTimeDiff = (time - lastTime) * 0.001f;
