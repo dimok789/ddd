@@ -25,16 +25,16 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <inttypes.h>
-#ifndef __APPLE__
-#include <malloc.h>
-#endif
-#ifdef __APPLE__
-#define fopen64 fopen
-#define ftello64 ftello
-#endif
 #include <sys/stat.h>
 #include "Input.h"
 #include "network.h"
+#ifdef _WIN32
+#define fopen fopen64
+#define ftello ftello64
+#endif
+#ifndef __APPLE__
+#include <malloc.h>
+#endif
 
 typedef struct {
     unsigned char tag;
@@ -187,7 +187,7 @@ void processTag(int client_socket, SendData *sendData)
         {
             lastTime = gettime();
             lastSize = 0;
-            pFile = fopen64(localPath, "wb");
+            pFile = fopen(localPath, "wb");
             printf("Open file: %s\n", localPath);
             if(!pFile) {
                 printf("Failed to open: %s\n", localPath);
@@ -200,7 +200,7 @@ void processTag(int client_socket, SendData *sendData)
         if(!pFile) {
             break;
         }
-        uint64_t size = (uint64_t)ftello64(pFile);
+        uint64_t size = (uint64_t)ftello(pFile);
         unsigned int time = gettime();
         float fTimeDiff = (time - lastTime) * 0.001f;
         float fSpeed = (fTimeDiff == 0.0f) ? 0.0f : ( (float)size / fTimeDiff / 1024.0f );
