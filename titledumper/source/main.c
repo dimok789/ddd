@@ -21,10 +21,20 @@
  * 3. This notice may not be removed or altered from any source
  * distribution.
  *****************************************************d**********************/
+
+/* enables fopen64/ftello64 */
+#define _LARGEFILE64_SOURCE
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <inttypes.h>
+#include <signal.h>
+#include <assert.h>
+#ifndef WIN32
+#include <sys/time.h> /* for gettimeofday */
+#endif
+#include <string.h>
 #ifndef __APPLE__
 #include <malloc.h>
 #endif
@@ -197,9 +207,7 @@ void processTag(int client_socket, SendData *sendData)
         break;
     }
     case 0x03: {
-        if(!pFile) {
-            break;
-        }
+        assert(pFile && "Trying to write to a file that was not opened; this dump is broken or corrupt.");
         uint64_t size = (uint64_t)ftello64(pFile);
         unsigned int time = gettime();
         float fTimeDiff = (time - lastTime) * 0.001f;
@@ -224,6 +232,16 @@ void processTag(int client_socket, SendData *sendData)
     }
 }
 
+
+volatile sig_atomic_t shouldStop = 0;
+
+void HandleInterrupt(int signum)
+{
+    if(signum == SIGINT)
+        shouldStop = 1;
+}
+
+
 #define MAX_CLIENTS 5
 
 int main(int argc, char *argv[])
@@ -236,7 +254,7 @@ int main(int argc, char *argv[])
         printf("Local Path e.g.: D:/some game/path or ./some game/path\n");
         return 0;
     }
-    printf("Waiting for WiiU connection...\n");
+    printf("Waiting for WiiU connection... (press Ctrl+C to stop)\n");
 
     char *ptr = (char*)argv[1];
     while(*ptr)
@@ -294,7 +312,9 @@ int main(int argc, char *argv[])
 	fd_set fdReadSet;
     struct timeval timeout;
 
-    while(1)
+    signal(SIGINT, HandleInterrupt);
+
+    while(!shouldStop)
     {
         timeout.tv_sec = 1;
         timeout.tv_usec = 0;
@@ -316,6 +336,8 @@ int main(int argc, char *argv[])
         int sel_ret = select(iMaxFd + 1, &fdReadSet, NULL, NULL, &timeout);
         if(sel_ret == 0)
             continue;
+        if(sel_ret == -1)
+            break;
 
 		if(FD_ISSET(serverSocket, &fdReadSet))
 		{
@@ -368,7 +390,7 @@ int main(int argc, char *argv[])
                         processTag(clientSockets[i], sendData);
 
                         length -= processed;
-                        memcpy(data, data + processed, length);
+                        memmove(data, data + processed, length);
                     }
                 }
                 else if(ret <= 0)
@@ -383,6 +405,8 @@ int main(int argc, char *argv[])
 
     CloseSocket();
     free(data);
+
+    printf("\n");
 
     return 0;
 }
