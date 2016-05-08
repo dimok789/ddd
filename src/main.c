@@ -20,6 +20,7 @@
 #include "discdumper.h"
 #include "patcher/function_hooks.h"
 #include "kernel/kernel_functions.h"
+#include "fs/sd_fat_devoptab.h"
 
 typedef union u_serv_ip
 {
@@ -66,6 +67,12 @@ int Menu_Main(void)
     PatchMethodHooks();
 
     memoryInitialize();
+
+    //!*******************************************************************
+    //!                        Initialize FS                             *
+    //!*******************************************************************
+    log_printf("Mount SD partition\n");
+    mount_sd_fat("sd");
 
     VPADInit();
 
@@ -188,6 +195,9 @@ int Menu_Main(void)
 
 	MEM1_free(screenBuffer);
 	screenBuffer = NULL;
+
+    log_printf("Unmount SD\n");
+    unmount_sd_fat("sd");
 
     log_deinit();
 

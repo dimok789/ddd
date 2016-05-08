@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include <string.h>
 #include <malloc.h>
 #include "common/kernel_defs.h"
@@ -613,11 +615,23 @@ void ResetDumper(void)
 void SetServerIp(u32 ip)
 {
     serverIpAddress = ip;
+    int iFd = open(SERVER_IP_HEX_PATH, O_WRONLY);
+	if (iFd >= 0)
+	{
+		write(iFd, (u8 *) &serverIpAddress, 4);
+		close(iFd);
+	}
 }
 
 u32 GetServerIp(void)
 {
-    return serverIpAddress;
+    int iFd = open(SERVER_IP_HEX_PATH, O_RDONLY);
+	if (iFd >= 0)
+	{
+		read(iFd, (u8 *) &serverIpAddress, 4);
+		close(iFd);
+	}
+	return serverIpAddress;
 }
 
 static int thread_callback(int argc, void *argv)

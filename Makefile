@@ -37,7 +37,8 @@ SOURCES		:=	src \
 				src/kernel \
 				src/patcher \
 				src/system \
-				src/utils
+				src/utils \
+				src/fs
 DATA		:=	
 
 INCLUDES	:=  src
