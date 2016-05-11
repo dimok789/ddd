@@ -22,6 +22,8 @@ u32 GetServerIp(void);
 
 int IsDumpingDiscUsbMeta(void);
 
+#define SERVER_IP_HEX_PATH       "sd:/wiiu/apps/ddd/serverIpAddress.hex"
+
 #ifdef __cplusplus
 }
 #endif
