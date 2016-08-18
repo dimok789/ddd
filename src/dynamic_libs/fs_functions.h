@@ -28,7 +28,8 @@
 extern "C" {
 #endif
 
-#include "common/fs_defs.h"
+#include <gctypes.h>
+#include "fs_defs.h"
 
 void InitFSFunctionPointers(void);
 
@@ -82,6 +83,10 @@ extern int (* FSWriteFile)(void *pClient, void *pCmd, const void *source, int bl
 
 extern int (* FSBindMount)(void *pClient, void *pCmd, char *source, char *target, int error);
 extern int (* FSBindUnmount)(void *pClient, void *pCmd, char *target, int error);
+
+extern int (* FSMakeQuota)( void *pClient, void *pCmd, const char *path,u32 mode, u64 size, int errHandling);
+extern int (* FSMakeQuotaAsync)(void *pClient, void *pCmd, const char *path,u32 mode, u64 size, int errHandling,const void  *asyncParams);
+
 
 #ifdef __cplusplus
 }

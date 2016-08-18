@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="ddd" />
+		<Option makefile_is_custom="1" />
+		<Option pch_mode="2" />
+		<Option compiler="ppc-gcc" />
+		<Build>
+			<Target title="build">
+				<Option output="bin/Release/ddd" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="ppc-gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<MakeCommands>
+					<Build command="$make -f $makefile $target -j8" />
+					<CompileFile command="$make -f $makefile $file" />
+					<Clean command="$make -f $makefile clean$target" />
+					<DistClean command="$make -f $makefile distclean$target" />
+					<AskRebuildNeeded command="$make -q -f $makefile $target" />
+					<SilentBuild command="$make -f $makefile $target -j8 &gt; $(CMD_NULL)" />
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="build/acp_functions.d" />
+		<Unit filename="build/aoc_functions.d" />
+		<Unit filename="build/ax_functions.d" />
+		<Unit filename="build/curl_functions.d" />
+		<Unit filename="build/discdumper.d" />
+		<Unit filename="build/entry.d" />
+		<Unit filename="build/fs_functions.d" />
+		<Unit filename="build/fs_utils.d" />
+		<Unit filename="build/function_hooks.d" />
+		<Unit filename="build/function_patcher.d" />
+		<Unit filename="build/gx2_functions.d" />
+		<Unit filename="build/kernel_functions.d" />
+		<Unit filename="build/kernel_hooks.d" />
+		<Unit filename="build/loader_function_patcher.d" />
+		<Unit filename="build/logger.d" />
+		<Unit filename="build/main.d" />
+		<Unit filename="build/memory.d" />
+		<Unit filename="build/memory_area_table.d" />
+		<Unit filename="build/net.d" />
+		<Unit filename="build/os_functions.d" />
+		<Unit filename="build/padscore_functions.d" />
+		<Unit filename="build/rpx_rpl_table.d" />
+		<Unit filename="build/sd_fat_devoptab.d" />
+		<Unit filename="build/socket_functions.d" />
+		<Unit filename="build/sys_functions.d" />
+		<Unit filename="build/syscalls.d" />
+		<Unit filename="build/syscalls_asm.d" />
+		<Unit filename="build/syshid_functions.d" />
+		<Unit filename="build/utils.d" />
+		<Unit filename="build/vpad_functions.d" />
+		<Unit filename="src/common/common.h" />
+		<Unit filename="src/common/fs_defs.h" />
+		<Unit filename="src/common/kernel_defs.h" />
+		<Unit filename="src/common/loader_defs.h" />
+		<Unit filename="src/common/os_defs.h" />
+		<Unit filename="src/common/types.h" />
+		<Unit filename="src/discdumper.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/discdumper.h" />
+		<Unit filename="src/dynamic_libs/acp_functions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/dynamic_libs/acp_functions.h" />
+		<Unit filename="src/dynamic_libs/aoc_functions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/dynamic_libs/aoc_functions.h" />
+		<Unit filename="src/dynamic_libs/ax_functions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/dynamic_libs/ax_functions.h" />
+		<Unit filename="src/dynamic_libs/curl_functions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/dynamic_libs/curl_functions.h" />
+		<Unit filename="src/dynamic_libs/fs_defs.h" />
+		<Unit filename="src/dynamic_libs/fs_functions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/dynamic_libs/fs_functions.h" />
+		<Unit filename="src/dynamic_libs/gx2_functions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/dynamic_libs/gx2_functions.h" />
+		<Unit filename="src/dynamic_libs/gx2_types.h" />
+		<Unit filename="src/dynamic_libs/os_functions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/dynamic_libs/os_functions.h" />
+		<Unit filename="src/dynamic_libs/padscore_functions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/dynamic_libs/padscore_functions.h" />
+		<Unit filename="src/dynamic_libs/socket_functions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/dynamic_libs/socket_functions.h" />
+		<Unit filename="src/dynamic_libs/sys_functions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/dynamic_libs/sys_functions.h" />
+		<Unit filename="src/dynamic_libs/syshid_functions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/dynamic_libs/syshid_functions.h" />
+		<Unit filename="src/dynamic_libs/vpad_functions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/dynamic_libs/vpad_functions.h" />
+		<Unit filename="src/entry.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/fs/fs_utils.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/fs/fs_utils.h" />
+		<Unit filename="src/fs/sd_fat_devoptab.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/fs/sd_fat_devoptab.h" />
+		<Unit filename="src/game/memory_area_table.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/game/memory_area_table.h" />
+		<Unit filename="src/game/rpx_rpl_table.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/game/rpx_rpl_table.h" />
+		<Unit filename="src/kernel/kernel_functions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/kernel/kernel_functions.h" />
+		<Unit filename="src/kernel/kernel_hooks.S" />
+		<Unit filename="src/kernel/syscalls.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/kernel/syscalls.h" />
+		<Unit filename="src/kernel/syscalls_asm.S" />
+		<Unit filename="src/main.cpp" />
+		<Unit filename="src/main.h" />
+		<Unit filename="src/patcher/loader_function_patcher.cpp" />
+		<Unit filename="src/patcher/loader_function_patcher.hpp" />
+		<Unit filename="src/system/memory.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/system/memory.h" />
+		<Unit filename="src/utils/function_patcher.cpp" />
+		<Unit filename="src/utils/function_patcher.h" />
+		<Unit filename="src/utils/logger.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/utils/logger.h" />
+		<Unit filename="src/utils/net.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/utils/net.h" />
+		<Unit filename="src/utils/utils.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/utils/utils.h" />
+		<Unit filename="titledumper/source/Input.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="titledumper/source/Input.h" />
+		<Unit filename="titledumper/source/main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="titledumper/source/network.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="titledumper/source/network.h" />
+		<Unit filename="titledumper/source/winsock/winsock.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

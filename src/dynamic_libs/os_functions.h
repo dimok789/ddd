@@ -39,8 +39,8 @@ extern "C" {
 #define usleep(usecs)                   OSSleepTicks(MICROSECS_TO_TICKS(usecs))
 #define sleep(secs)                     OSSleepTicks(SECS_TO_TICKS(secs))
 
-#define FLUSH_DATA_BLOCK(addr)          asm volatile("dcbf 0, %0; sync; eieio" : : "r"(((addr) & ~31)))
-#define INVAL_DATA_BLOCK(addr)          asm volatile("dcbi 0, %0" : : "r"(((addr) & ~31)))
+#define FLUSH_DATA_BLOCK(addr)          asm volatile("dcbf 0, %0; sync" : : "r"(((addr) & ~31)))
+#define INVAL_DATA_BLOCK(addr)          asm volatile("dcbi 0, %0; sync" : : "r"(((addr) & ~31)))
 
 #define EXPORT_DECL(res, func, ...)     res (* func)(__VA_ARGS__) __attribute__((section(".data"))) = 0;
 #define EXPORT_VAR(type, var)           type var __attribute__((section(".data")));
@@ -66,12 +66,18 @@ extern "C" {
 /* Handle for coreinit */
 extern unsigned int coreinit_handle;
 void InitOSFunctionPointers(void);
+void InitAcquireOS(void);
 
 //!----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //! Lib handle functions
 //!----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 extern int (* OSDynLoad_Acquire)(const char* rpl, u32 *handle);
 extern int (* OSDynLoad_FindExport)(u32 handle, int isdata, const char *symbol, void *address);
+
+//!----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//! Security functions
+//!----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+extern int (* OSGetSecurityLevel)(void);
 
 //!----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //! Thread functions
@@ -86,6 +92,7 @@ extern int (* OSSetThreadPriority)(void * thread, int priority);
 extern void (* OSDetachThread)(void * thread);
 extern void (* OSSleepTicks)(u64 ticks);
 extern u64 (* OSGetTick)(void);
+extern u64 (* OSGetTime)(void);
 
 //!----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //! Mutex functions
@@ -106,6 +113,7 @@ extern void (* DCFlushRange)(const void *addr, u32 length);
 extern void (* ICInvalidateRange)(const void *addr, u32 length);
 extern void* (* OSEffectiveToPhysical)(const void*);
 extern int (* __os_snprintf)(char* s, int n, const char * format, ...);
+extern int * (* __gh_errno_ptr)(void);
 
 extern void (*OSScreenInit)(void);
 extern unsigned int (*OSScreenGetBufferSizeEx)(unsigned int bufferNum);
@@ -131,12 +139,31 @@ extern int (* MCP_GetOwnTitleInfo)(int handle, void * data);
 extern int (* LiWaitIopComplete)(int unknown_syscall_arg_r3, int * remaining_bytes);
 extern int (* LiWaitIopCompleteWithInterrupts)(int unknown_syscall_arg_r3, int * remaining_bytes);
 extern void (* addr_LiWaitOneChunk)(void);
+extern void (* addr_sgIsLoadingBuffer)(void);
+extern void (* addr_gDynloadInitialized)(void);
 
 //!----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //! Kernel function addresses
 //!----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 extern void (* addr_PrepareTitle_hook)(void);
 
+//!----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//! Other function addresses
+//!----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+extern void (*DCInvalidateRange)(void *buffer, uint32_t length);
+
+//!----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//! Energy Saver functions
+//!----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+////Burn-in Reduction
+extern int (*IMEnableDim)(void);
+extern int (*IMDisableDim)(void);
+extern int (*IMIsDimEnabled)(int * result);
+//Auto power down
+extern int (*IMEnableAPD)(void);
+extern int (*IMDisableAPD)(void);
+extern int (*IMIsAPDEnabled)(int * result);
+extern int (*IMIsAPDEnabledBySysSettings)(int * result);
 
 #ifdef __cplusplus
 }

@@ -18,9 +18,10 @@
 #include "game/rpx_rpl_table.h"
 #include "game/memory_area_table.h"
 #include "discdumper.h"
-#include "patcher/function_hooks.h"
+#include "patcher/loader_function_patcher.hpp"
 #include "kernel/kernel_functions.h"
 #include "fs/sd_fat_devoptab.h"
+#include "main.h"
 
 typedef union u_serv_ip
 {
@@ -64,7 +65,7 @@ int Menu_Main(void)
     memoryInitAreaTable();
     rpxRplTableInit();
     SetupKernelCallback();
-    PatchMethodHooks();
+    ApplyPatches();
 
     memoryInitialize();
 
@@ -85,7 +86,7 @@ int Menu_Main(void)
     screen_buf0_size = OSScreenGetBufferSizeEx(0);
     screen_buf1_size = OSScreenGetBufferSizeEx(1);
 
-    unsigned char *screenBuffer = MEM1_alloc(screen_buf0_size + screen_buf1_size, 0x40);
+    unsigned char *screenBuffer = (unsigned char *)MEM1_alloc(screen_buf0_size + screen_buf1_size, 0x40);
 
     OSScreenSetBufferEx(0, screenBuffer);
     OSScreenSetBufferEx(1, (screenBuffer + screen_buf0_size));
@@ -205,7 +206,7 @@ int Menu_Main(void)
 
     if(launchMethod == 0)
     {
-        RestoreInstructions();
+        RestorePatches();
         return EXIT_SUCCESS;
     }
     else if(launchMethod == 1)
@@ -221,4 +222,10 @@ int Menu_Main(void)
 
     return EXIT_RELAUNCH_ON_LOAD;
 }
+void ApplyPatches(){
+    PatchInvidualMethodHooks(method_hooks_loader,       method_hooks_size_loader,   method_calls_loader);
+}
 
+void RestorePatches(){
+    RestoreInvidualInstructions(method_hooks_loader,method_hooks_size_loader);
+}

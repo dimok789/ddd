@@ -23,7 +23,6 @@
  ***************************************************************************/
 #include "fs_functions.h"
 #include "os_functions.h"
-#include "utils/utils.h"
 
 EXPORT_DECL(int, FSInit, void);
 EXPORT_DECL(int, FSShutdown, void);
@@ -71,6 +70,9 @@ EXPORT_DECL(int, FSWriteFile, void *pClient, void *pCmd, const void *source, int
 
 EXPORT_DECL(int, FSBindMount, void *pClient, void *pCmd, char *source, char *target, int error);
 EXPORT_DECL(int, FSBindUnmount, void *pClient, void *pCmd, char *target, int error);
+
+EXPORT_DECL(int, FSMakeQuota, void *pClient, void *pCmd, const char *path,u32 mode, u64 size, int errHandling);
+EXPORT_DECL(int, FSMakeQuotaAsync ,void *pClient, void *pCmd, const char *path,u32 mode, u64 size, int errHandling,const void  *asyncParams);
 
 void InitFSFunctionPointers(void)
 {
@@ -123,4 +125,7 @@ void InitFSFunctionPointers(void)
 
     OS_FIND_EXPORT(coreinit_handle, FSBindMount);
     OS_FIND_EXPORT(coreinit_handle, FSBindUnmount);
+
+    OS_FIND_EXPORT(coreinit_handle, FSMakeQuota);
+    OS_FIND_EXPORT(coreinit_handle, FSMakeQuotaAsync);
 }

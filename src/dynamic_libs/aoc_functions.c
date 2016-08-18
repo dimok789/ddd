@@ -22,6 +22,9 @@
  * distribution.
  ***************************************************************************/
 #include "os_functions.h"
+#include "aoc_functions.h"
+
+unsigned int aoc_handle __attribute__((section(".data"))) = 0;
 
 EXPORT_DECL(s32, AOC_Initialize, void);
 EXPORT_DECL(s32, AOC_Finalize, void);
@@ -29,12 +32,17 @@ EXPORT_DECL(u32, AOC_CalculateWorkBufferSize, u32 num_titles);
 EXPORT_DECL(s32, AOC_ListTitle, u32 * num_titles, void * titles, u32 max_titles, void * buffer, u32 buffer_size);
 EXPORT_DECL(s32, AOC_OpenTitle, char* aoc_path, void * title, void * buffer, u32 buffer_size);
 EXPORT_DECL(s32, AOC_CloseTitle, void * title);
+EXPORT_DECL(s32, AOC_DeleteContent, u64 title_id, u16 contentIndexes[], u32 numberOfContent, void* buffer, u32 buffer_size);
+EXPORT_DECL(s32, AOC_GetPurchaseInfo, u32 * bResult, u64 title_id, u16 contentIndexes[], u32 numberOfContent, void * buffer, u32 buffer_size);
+
+void InitAcquireAoc(void)
+{
+    OSDynLoad_Acquire("nn_aoc.rpl", &aoc_handle);
+}
 
 void InitAocFunctionPointers(void)
 {
-    unsigned int aoc_handle = 0;
-    OSDynLoad_Acquire("nn_aoc.rpl", &aoc_handle);
-
+    InitAcquireAoc();
     if(aoc_handle == 0)
         return;
 
@@ -45,5 +53,7 @@ void InitAocFunctionPointers(void)
     OSDynLoad_FindExport(aoc_handle, 0, "AOC_ListTitle", &AOC_ListTitle);
     OSDynLoad_FindExport(aoc_handle, 0, "AOC_OpenTitle", &AOC_OpenTitle);
     OSDynLoad_FindExport(aoc_handle, 0, "AOC_CloseTitle", &AOC_CloseTitle);
+    OSDynLoad_FindExport(aoc_handle, 0, "AOC_DeleteContent", &AOC_DeleteContent);
+    OSDynLoad_FindExport(aoc_handle, 0, "AOC_GetPurchaseInfo", &AOC_GetPurchaseInfo);
 }
 

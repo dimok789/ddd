@@ -26,6 +26,8 @@
 
 u32 hostIpAddress = 0;
 
+unsigned int nsysnet_handle __attribute__((section(".data"))) = 0;
+
 EXPORT_DECL(void, socket_lib_init, void);
 EXPORT_DECL(int, socket, int domain, int type, int protocol);
 EXPORT_DECL(int, socketclose, int s);
@@ -40,22 +42,20 @@ EXPORT_DECL(int, setsockopt, int s, int level, int optname, void *optval, int op
 EXPORT_DECL(char *, inet_ntoa, struct in_addr in);
 EXPORT_DECL(int, inet_aton, const char *cp, struct in_addr *inp);
 
+EXPORT_DECL(int, NSSLWrite, int connection, const void* buf, int len,int * written);
+EXPORT_DECL(int, NSSLRead, int connection, const void* buf, int len,int * read);
+EXPORT_DECL(int, NSSLCreateConnection, int context, const char* host, int hotlen,int options,int sock,int block);
+
+void InitAcquireSocket(void)
+{
+    OSDynLoad_Acquire("nsysnet.rpl", &nsysnet_handle);
+}
+
 void InitSocketFunctionPointers(void)
 {
-    unsigned int nsysnet_handle;
     unsigned int *funcPointer = 0;
-    OSDynLoad_Acquire("nsysnet.rpl", &nsysnet_handle);
 
-    unsigned int nn_ac_handle;
-    int(*ACInitialize)();
-    int(*ACGetStartupId) (unsigned int *id);
-    int(*ACConnectWithConfigId) (unsigned int id);
-    int(*ACGetAssignedAddress) (u32 * ip);
-    OSDynLoad_Acquire("nn_ac.rpl", &nn_ac_handle);
-    OSDynLoad_FindExport(nn_ac_handle, 0, "ACInitialize", &ACInitialize);
-    OSDynLoad_FindExport(nn_ac_handle, 0, "ACGetStartupId", &ACGetStartupId);
-    OSDynLoad_FindExport(nn_ac_handle, 0, "ACConnectWithConfigId",&ACConnectWithConfigId);
-    OSDynLoad_FindExport(nn_ac_handle, 0, "ACGetAssignedAddress",&ACGetAssignedAddress);
+    InitAcquireSocket();
 
     OS_FIND_EXPORT(nsysnet_handle, socket_lib_init);
     OS_FIND_EXPORT(nsysnet_handle, socket);
@@ -71,11 +71,9 @@ void InitSocketFunctionPointers(void)
     OS_FIND_EXPORT(nsysnet_handle, inet_ntoa);
     OS_FIND_EXPORT(nsysnet_handle, inet_aton);
 
-    unsigned int nn_startupid;
-    ACInitialize();
-    ACGetStartupId(&nn_startupid);
-    ACConnectWithConfigId(nn_startupid);
-    ACGetAssignedAddress(&hostIpAddress);
+    OS_FIND_EXPORT(nsysnet_handle, NSSLWrite);
+    OS_FIND_EXPORT(nsysnet_handle, NSSLRead);
+    OS_FIND_EXPORT(nsysnet_handle, NSSLCreateConnection);
 
     socket_lib_init();
 }

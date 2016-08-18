@@ -11,6 +11,8 @@ extern "C" {
 
 //! C wrapper for our C++ functions
 int Menu_Main(void);
+void ApplyPatches(void);
+void RestorePatches(void);
 
 #ifdef __cplusplus
 }

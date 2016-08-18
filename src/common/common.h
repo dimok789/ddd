@@ -15,6 +15,21 @@ extern "C" {
 #define LIB_CORE_INIT           0
 #define LIB_NSYSNET             1
 #define LIB_GX2                 2
+#define LIB_AOC                 3
+#define LIB_AX                  4
+#define LIB_FS                  5
+#define LIB_OS                  6
+#define LIB_PADSCORE            7
+#define LIB_SOCKET              8
+#define LIB_SYS                 9
+#define LIB_VPAD                10
+#define LIB_NN_ACP              11
+#define LIB_SYSHID              12
+#define LIB_VPADBASE            13
+
+// functions types
+#define STATIC_FUNCTION         0
+#define DYNAMIC_FUNCTION        1
 // none dynamic libs
 #define LIB_LOADER              0x1001
 
